@@ -250,7 +250,55 @@
       text-transform: uppercase;
     }
 
-    .card-nebula { background: #050510; }
+    /* SPACE card — white with flowing gold border + photo */
+    .card-space {
+      background: #fff;
+    }
+    .card-space .space-photo {
+      position: absolute;
+      inset: 18px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #111;
+    }
+    .card-space .space-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .card-space::after {
+      content: '';
+      position: absolute;
+      inset: 14px;
+      border-radius: 12px;
+      padding: 2px;
+      background: linear-gradient(
+        135deg,
+        #b8860b,
+        #f5e6a3,
+        #ffd700,
+        #c9a84c,
+        #fff8dc,
+        #daa520,
+        #b8860b
+      );
+      background-size: 300% 300%;
+      animation: goldFlow 5s ease infinite;
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 2;
+    }
+    @keyframes goldFlow {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
     /* Dashed guide ring — same center as cards, r = 200px */
     .guide-ring {
@@ -464,33 +512,29 @@
   <script>
   /* ═══════════════════════════════════════════════════════════
      1. CIRCULAR CARD CAROUSEL
-     Cards r=440. Guide ring r=200 (same center).
-     ME compass on ring always points at SPACE card.
-     Directional lag: right = wave, left = snap + inertia.
+     Center at bottom, radius 500px. Cards 2× larger.
+     Smooth slow rotation; continuous RAF loop (no jitter).
+     Guide ring r=200 + ME compass always points at SPACE card.
   ═══════════════════════════════════════════════════════════ */
   (function () {
-    const RADIUS = 440;
+    const RADIUS = 500;
     const RING_RADIUS = 200;
     const SPACE_IDX = 0; // nebula / SPACE card
+    // ~14 cards → arc step ≈ card width, only corner overlap
     const TOTAL_CARDS = 14;
-    const LIFT_MAX = 24;
-    const SCALE_MAX = 1.08;
+    const LIFT_MAX = 20;
+    const SCALE_MAX = 1.06;
+    const EASE = 0.045;
     const IDLE_DELAY = 450;
-    const EASE_RIGHT = 0.13;
-    const EASE_LEFT_LEAD = 0.09;
-    const EASE_LEFT_TRAIL = 0.025;
-    const STAGGER = 0.03;
-    const MAX_RANK_LAG = 8;
 
     const track = document.getElementById('circleTrack');
     const stage = document.getElementById('stage');
     const meMarker = document.getElementById('meMarker');
 
     const realCards = [
-      `<div class="card card-nebula" data-card="nebula">
-        <div style="width:100%;height:100%;background:radial-gradient(circle at 50% 40%, #1a3a6e 0%, #0a1020 40%, #050510 100%);position:relative;">
-          <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 45%, rgba(100,180,255,0.4) 0%, transparent 50%);"></div>
-          <div style="position:absolute;bottom:12px;left:12px;color:#fff;font-size:0.65rem;letter-spacing:0.1em;opacity:0.75;">SPACE</div>
+      `<div class="card card-space" data-card="nebula">
+        <div class="space-photo">
+          <img src="me.png" alt="Cuong Nguyen">
         </div>
       </div>`,
       `<div class="card card-deep" data-card="deep">
@@ -549,16 +593,13 @@
     const cards = Array.from(track.querySelectorAll('.card'));
     const step = 360 / TOTAL_CARDS;
 
-    const rot = new Float32Array(TOTAL_CARDS);
+    let currentRotation = 0;
     let targetRotation = 0;
-    let moveDir = 0;
-    let leadIdx = 0;
     let activeIdx = -1;
     let hoverIdx = -1;
-    let liftAmt = 0;
+    let liftAmt = 0;       // smoothed 0..1 for active lift/scale
     let idleTimer = null;
     let lastTs = 0;
-    let moveSpan = 1;
 
     function baseAngle(i) {
       return 90 - i * step;
@@ -571,37 +612,20 @@
       return d;
     }
 
-    function wrapRot(v) {
-      if (v > 360 || v < -360) {
-        v = ((v % 360) + 360) % 360;
-        if (v > 180) v -= 360;
-      }
-      return v;
-    }
-
-    function trailRank(i, lead, dir) {
-      if (dir >= 0) return (i - lead + TOTAL_CARDS) % TOTAL_CARDS;
-      return (lead - i + TOTAL_CARDS) % TOTAL_CARDS;
-    }
-
-    function avgRot() {
-      let s = 0;
-      for (let i = 0; i < TOTAL_CARDS; i++) s += rot[i];
-      return s / TOTAL_CARDS;
-    }
-
     function layout() {
       const r = RADIUS;
       cards.forEach((card, i) => {
-        const a = (baseAngle(i) + rot[i]) * Math.PI / 180;
+        const a = (baseAngle(i) + currentRotation) * Math.PI / 180;
         const x = Math.cos(a) * r;
         const y = -Math.sin(a) * r;
         const tilt = (x / r) * 14;
         const isActive = activeIdx === i;
         const scale = 1 + (SCALE_MAX - 1) * (isActive ? liftAmt : 0);
         const lift = isActive ? -LIFT_MAX * liftAmt : 0;
-        let z = Math.round(100 + Math.sin(a) * 80) * 100 + i;
-        if (isActive && liftAmt > 0.2) z += 50000;
+        // Stable depth stack: higher on the arc (toward top) = higher z.
+        // Never boost on hover — avoids flicker in overlap zones.
+        // Secondary tie-break by index so left/right order stays consistent.
+        const z = Math.round(100 + Math.sin(a) * 80) * 100 + i;
         card.style.transform =
           `translate3d(${x}px, ${y + lift}px, 0) rotate(${tilt}deg) scale(${scale})`;
         card.style.zIndex = z;
@@ -611,7 +635,7 @@
       // ME compass: sits on dashed ring at SPACE card angle,
       // arrow points radially outward toward SPACE (like a compass)
       if (meMarker) {
-        const aDeg = baseAngle(SPACE_IDX) + rot[SPACE_IDX];
+        const aDeg = baseAngle(SPACE_IDX) + currentRotation;
         const a = aDeg * Math.PI / 180;
         const mx = Math.cos(a) * RING_RADIUS;
         const my = -Math.sin(a) * RING_RADIUS;
@@ -627,55 +651,22 @@
 
     function tick(ts) {
       if (!lastTs) lastTs = ts;
-      const dt = Math.min(32, ts - lastTs) / 16.67;
+      const dt = Math.min(32, ts - lastTs) / 16.67; // normalize ~60fps units
       lastTs = ts;
 
-      const lead = leadIdx >= 0 ? leadIdx : 0;
-      const leadDiff = shortestDiff(rot[lead], targetRotation);
-      const leadDist = Math.abs(leadDiff);
-      const progress = moveSpan > 0.5
-        ? Math.min(1, 1 - leadDist / moveSpan)
-        : 1;
+      const diff = shortestDiff(currentRotation, targetRotation);
+      // frame-rate independent exponential ease
+      const k = 1 - Math.pow(1 - EASE, dt);
+      currentRotation += diff * k;
 
-      for (let i = 0; i < TOTAL_CARDS; i++) {
-        const rank = Math.min(trailRank(i, lead, moveDir), MAX_RANK_LAG);
-        const diff = shortestDiff(rot[i], targetRotation);
-        let ease;
-
-        if (moveDir > 0) {
-          const staggerSlow = 1 / (1 + rank * STAGGER * 10);
-          ease = EASE_RIGHT * staggerSlow;
-          const cardDist = Math.abs(diff);
-          const cardProg = moveSpan > 0.5
-            ? Math.min(1, 1 - cardDist / moveSpan)
-            : 1;
-          const eio = cardProg * (1 - cardProg) * 4;
-          ease *= 0.5 + 0.5 * Math.max(eio, 0.2);
-        } else if (moveDir < 0) {
-          if (rank === 0) {
-            ease = EASE_LEFT_LEAD;
-          } else {
-            const inertia = progress * progress * 0.1;
-            ease = EASE_LEFT_TRAIL / (1 + rank * 0.4) + inertia;
-          }
-        } else {
-          ease = 0.05;
-        }
-
-        const k = 1 - Math.pow(1 - ease, dt);
-        rot[i] = wrapRot(rot[i] + diff * k);
+      // keep currentRotation from drifting unbounded
+      if (currentRotation > 360 || currentRotation < -360) {
+        currentRotation = ((currentRotation % 360) + 360) % 360;
+        if (currentRotation > 180) currentRotation -= 360;
       }
 
-      const liftK = 1 - Math.pow(1 - 0.08, dt);
-      liftAmt += ((activeIdx >= 0 ? 1 : 0) - liftAmt) * liftK;
-
-      if (leadDist < 0.15 && moveDir !== 0) {
-        let maxLag = 0;
-        for (let i = 0; i < TOTAL_CARDS; i++) {
-          maxLag = Math.max(maxLag, Math.abs(shortestDiff(rot[i], targetRotation)));
-        }
-        if (maxLag < 0.3) moveDir = 0;
-      }
+      const liftTarget = activeIdx >= 0 ? 1 : 0;
+      liftAmt += (liftTarget - liftAmt) * k;
 
       layout();
       requestAnimationFrame(tick);
@@ -686,17 +677,10 @@
       clearTimeout(idleTimer);
       hoverIdx = idx;
       activeIdx = idx;
-      leadIdx = idx;
-
+      // bring card to top (90°)
       let t = 90 - baseAngle(idx);
-      const ref = rot[idx];
-      const delta = shortestDiff(ref, t);
-      t = ref + delta;
-
-      if (Math.abs(delta) > 0.5) {
-        moveDir = delta > 0 ? 1 : -1;
-        moveSpan = Math.max(Math.abs(delta), 1);
-      }
+      // choose shortest path relative to *current* rotation
+      t = currentRotation + shortestDiff(currentRotation, t);
       targetRotation = t;
     }
 
@@ -705,14 +689,8 @@
       idleTimer = setTimeout(() => {
         if (hoverIdx < 0) {
           activeIdx = -1;
-          const ref = avgRot();
-          const delta = shortestDiff(ref, 0);
-          if (Math.abs(delta) > 0.5) {
-            moveDir = delta > 0 ? 1 : -1;
-            moveSpan = Math.max(Math.abs(delta), 1);
-            leadIdx = 0;
-          }
-          targetRotation = ref + delta;
+          // gently return toward 0 without forced snap
+          targetRotation = currentRotation + shortestDiff(currentRotation, 0);
         }
       }, IDLE_DELAY);
     }
@@ -729,14 +707,7 @@
       hoverIdx = -1;
       clearTimeout(idleTimer);
       activeIdx = -1;
-      const ref = avgRot();
-      const delta = shortestDiff(ref, 0);
-      if (Math.abs(delta) > 0.5) {
-        moveDir = delta > 0 ? 1 : -1;
-        moveSpan = Math.max(Math.abs(delta), 1);
-        leadIdx = 0;
-      }
-      targetRotation = ref + delta;
+      targetRotation = currentRotation + shortestDiff(currentRotation, 0);
     });
 
     layout();
