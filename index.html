@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuong Nguyen — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #e8e8e8;
+      --red: #e31c23;
+      --dark: #111;
+      --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1.25rem 1rem 0;
+      position: relative;
+    }
+
+    .cross {
+      position: absolute;
+      color: #bbb;
+      font-size: 0.7rem;
+      font-weight: 300;
+      user-select: none;
+      pointer-events: none;
+    }
+    .cross-1 { top: 8%; left: 12%; }
+    .cross-2 { top: 6%; right: 18%; }
+    .cross-3 { top: 22%; left: 8%; }
+    .cross-4 { top: 20%; right: 10%; }
+
+    .header {
+      text-align: center;
+      width: 100%;
+      max-width: 1000px;
+      position: relative;
+      z-index: 10;
+      margin-bottom: 0.5rem;
+    }
+
+    .welcome {
+      font-size: 0.85rem;
+      letter-spacing: 0.35em;
+      font-weight: 500;
+      color: #444;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+    }
+
+    /* Vector Wordmark host */
+    .title-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      height: clamp(140px, 22vw, 220px);
+      margin: 0.25rem auto 1rem;
+      overflow: hidden;
+      border-radius: 4px;
+    }
+
+    #wordmark {
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      background: transparent;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      max-width: 620px;
+      margin: 0 auto;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      font-weight: 500;
+      color: #555;
+      text-transform: uppercase;
+      padding: 0 1rem;
+    }
+
+    /* ── Circular cards stage ── */
+    .stage {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      min-height: 520px;
+      height: calc(100vh - 280px);
+      margin-top: 0.5rem;
+      overflow: visible;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .circle-track {
+      position: absolute;
+      left: 50%;
+      bottom: -100px; /* center shifted 100px down */
+      width: 0;
+      height: 0;
+      transform-origin: center center;
+      will-change: transform;
+    }
+
+    .card {
+      position: absolute;
+      width: 187px;
+      height: 267px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      cursor: pointer;
+      transform-origin: center center;
+      will-change: transform;
+      transition: box-shadow 0.35s ease, filter 0.35s ease;
+      left: 0;
+      top: 0;
+      margin-left: -93.5px;
+      margin-top: -133.5px;
+    }
+
+    .card.card-empty {
+      background: linear-gradient(160deg, #f5f5f5, #e0e0e0);
+      box-shadow: 0 12px 28px -10px rgba(0,0,0,0.18);
+      pointer-events: auto;
+    }
+
+    .card.card-empty::after {
+      content: '';
+      position: absolute;
+      inset: 14px;
+      border: 1px dashed #ccc;
+      border-radius: 12px;
+      opacity: 0.55;
+    }
+
+    /* no z-index change on hover — hierarchy is fixed by position */
+    .card:hover {
+      box-shadow: 0 28px 50px -12px rgba(0,0,0,0.4);
+    }
+
+    .card.is-active {
+      filter: brightness(1.05);
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-red {
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-red .logo { width: 100px; height: 100px; }
+
+    .card-photo { background: #1a1a1a; }
+    .card-photo .overlay {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      font-size: 0.65rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .card-polestar {
+      background: linear-gradient(145deg, #f0f0f0, #d8d8d8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      text-align: center;
+    }
+    .card-polestar .ratio {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      color: #111;
+      line-height: 1;
+    }
+    .card-polestar .brand {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+      color: #444;
+    }
+
+    .card-casino {
+      background: #0a0a0a;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 1.2rem;
+    }
+    .card-casino .label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .card-deep {
+      background: #0d0d12;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1rem;
+    }
+    .card-deep .title-text {
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .card-nebula { background: #050510; }
+
+    /* Dashed guide ring — same center as cards, r = 200px */
+    .guide-ring {
+      position: absolute;
+      left: 50%;
+      bottom: -100px;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .guide-ring-circle {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 400px;
+      height: 400px;
+      margin-left: -200px;
+      margin-top: -200px;
+      border: 1.5px dashed #aaa;
+      border-radius: 50%;
+      box-sizing: border-box;
+    }
+
+    /* ME compass on the guide ring — always points at SPACE card */
+    .me-marker {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+      z-index: 6;
+      will-change: transform;
+    }
+    .me-marker .me-arrow {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      font-size: 0.85rem;
+      line-height: 1;
+      color: var(--dark);
+      transform-origin: center center;
+    }
+    .me-marker .me-text {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, 12px);
+      background: var(--bg);
+      padding: 2px 10px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--dark);
+      white-space: nowrap;
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: #999;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 480px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 2rem;
+      position: relative;
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal.active .modal-content {
+      transform: scale(1) translateY(0);
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: #eee;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal-close:hover { background: #ddd; }
+    .modal h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .modal .tag {
+      display: inline-block;
+      background: var(--red);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .modal p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    .modal ul { list-style: none; margin: 1rem 0; }
+    .modal ul li {
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+    }
+    .modal ul li:last-child { border-bottom: none; }
+
+    @media (max-width: 700px) {
+      .card {
+        width: 140px;
+        height: 200px;
+        margin-left: -70px;
+        margin-top: -100px;
+        border-radius: 14px;
+      }
+      .stage {
+        min-height: 420px;
+        height: calc(100vh - 240px);
+      }
+      .title-wrapper { height: 120px; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .header { animation: fadeUp 0.8s ease both; }
+    .stage { animation: fadeUp 1s 0.15s ease both; }
+  </style>
+</head>
+<body>
+  <span class="cross cross-1">+</span>
+  <span class="cross cross-2">+</span>
+  <span class="cross cross-3">+</span>
+  <span class="cross cross-4">+</span>
+
+  <header class="header">
+    <div class="welcome">Welcome to my</div>
+    <div class="title-wrapper">
+      <div id="wordmark"></div>
+    </div>
+    <div class="meta">
+      <span>Cuong Nguyen</span>
+      <span>Multimedia Designer</span>
+    </div>
+  </header>
+
+  <div class="stage" id="stage">
+    <div class="guide-ring" id="guideRing">
+      <div class="guide-ring-circle" id="guideRingCircle"></div>
+      <div class="me-marker" id="meMarker">
+        <span class="me-arrow">▲</span>
+        <span class="me-text">ME</span>
+      </div>
+    </div>
+    <div class="circle-track" id="circleTrack">
+      <!-- cards injected by JS -->
+    </div>
+    <div class="hint">hover a card</div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose">×</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+  /* ═══════════════════════════════════════════════════════════
+     1. CIRCULAR CARD CAROUSEL
+     Cards r=440. Guide ring r=200 (same center).
+     ME compass on ring always points at SPACE card.
+     Directional lag: right = wave, left = snap + inertia.
+  ═══════════════════════════════════════════════════════════ */
+  (function () {
+    const RADIUS = 440;
+    const RING_RADIUS = 200;
+    const SPACE_IDX = 0; // nebula / SPACE card
+    const TOTAL_CARDS = 14;
+    const LIFT_MAX = 24;
+    const SCALE_MAX = 1.08;
+    const IDLE_DELAY = 450;
+    const EASE_RIGHT = 0.13;
+    const EASE_LEFT_LEAD = 0.09;
+    const EASE_LEFT_TRAIL = 0.025;
+    const STAGGER = 0.03;
+    const MAX_RANK_LAG = 8;
+
+    const track = document.getElementById('circleTrack');
+    const stage = document.getElementById('stage');
+    const meMarker = document.getElementById('meMarker');
+
+    const realCards = [
+      `<div class="card card-nebula" data-card="nebula">
+        <div style="width:100%;height:100%;background:radial-gradient(circle at 50% 40%, #1a3a6e 0%, #0a1020 40%, #050510 100%);position:relative;">
+          <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 45%, rgba(100,180,255,0.4) 0%, transparent 50%);"></div>
+          <div style="position:absolute;bottom:12px;left:12px;color:#fff;font-size:0.65rem;letter-spacing:0.1em;opacity:0.75;">SPACE</div>
+        </div>
+      </div>`,
+      `<div class="card card-deep" data-card="deep">
+        <div style="flex:1;background:linear-gradient(180deg,#0a0a15 0%,#1a1025 100%);position:relative;overflow:hidden;height:100%;">
+          <div style="position:absolute;top:20%;left:20%;width:40px;height:40px;background:radial-gradient(circle,#ff6b35,#c41e3a);border-radius:50%;box-shadow:0 0 30px #ff6b35;"></div>
+          <div style="position:absolute;top:15%;left:10%;width:80px;height:2px;background:linear-gradient(90deg,transparent,#ffcc00);transform:rotate(-30deg);"></div>
+          <div class="title-text" style="position:absolute;bottom:12px;left:12px;">Deep Impact</div>
+        </div>
+      </div>`,
+      `<div class="card card-red" data-card="identity">
+        <svg class="logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 12 C38 12 28 20 22 32 C16 44 16 56 22 68 C28 80 38 88 50 88 C62 88 72 80 78 68 C84 56 84 44 78 32 C72 20 62 12 50 12Z" stroke="#111" stroke-width="5.5" fill="none"/>
+          <ellipse cx="50" cy="50" rx="22" ry="14" stroke="#111" stroke-width="4.5" fill="none"/>
+          <circle cx="50" cy="50" r="7" fill="#111"/>
+          <path d="M50 28 L53 34 L50 32 L47 34 Z" fill="#111"/>
+          <path d="M50 72 L53 66 L50 68 L47 66 Z" fill="#111"/>
+          <path d="M28 50 L34 53 L32 50 L34 47 Z" fill="#111"/>
+          <path d="M72 50 L66 53 L68 50 L66 47 Z" fill="#111"/>
+        </svg>
+      </div>`,
+      `<div class="card card-photo" data-card="about">
+        <div style="width:100%;height:100%;background:linear-gradient(160deg,#2a2a2a,#111);display:flex;align-items:center;justify-content:center;position:relative;">
+          <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(145deg,#444,#222);display:flex;align-items:center;justify-content:center;border:3px solid #555;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="#888">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+          <div class="overlay">CVS XX4</div>
+        </div>
+      </div>`,
+      `<div class="card card-polestar" data-card="polestar">
+        <div class="ratio">1:1</div>
+        <div class="brand">Polestar</div>
+        <div style="margin-top:auto;font-size:0.6rem;color:#666;letter-spacing:0.1em;">CONCEPT</div>
+      </div>`,
+      `<div class="card card-casino" data-card="casino">
+        <div style="flex:1;width:100%;background:radial-gradient(circle at 50% 30%,#2a1a3a,#0a0a0a);display:flex;align-items:center;justify-content:center;">
+          <div style="width:70px;height:70px;border:2px solid #c9a84c;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:1.8rem;color:#c9a84c;">♠</span>
+          </div>
+        </div>
+        <div class="label">Casino</div>
+      </div>`
+    ];
+
+    const parts = [];
+    for (let i = 0; i < TOTAL_CARDS; i++) {
+      if (i < realCards.length) {
+        parts.push(realCards[i].replace(/class="card/, `data-idx="${i}" class="card`));
+      } else {
+        parts.push(`<div class="card card-empty" data-idx="${i}"></div>`);
+      }
+    }
+    track.innerHTML = parts.join('');
+
+    const cards = Array.from(track.querySelectorAll('.card'));
+    const step = 360 / TOTAL_CARDS;
+
+    const rot = new Float32Array(TOTAL_CARDS);
+    let targetRotation = 0;
+    let moveDir = 0;
+    let leadIdx = 0;
+    let activeIdx = -1;
+    let hoverIdx = -1;
+    let liftAmt = 0;
+    let idleTimer = null;
+    let lastTs = 0;
+    let moveSpan = 1;
+
+    function baseAngle(i) {
+      return 90 - i * step;
+    }
+
+    function shortestDiff(from, to) {
+      let d = to - from;
+      while (d > 180) d -= 360;
+      while (d < -180) d += 360;
+      return d;
+    }
+
+    function wrapRot(v) {
+      if (v > 360 || v < -360) {
+        v = ((v % 360) + 360) % 360;
+        if (v > 180) v -= 360;
+      }
+      return v;
+    }
+
+    function trailRank(i, lead, dir) {
+      if (dir >= 0) return (i - lead + TOTAL_CARDS) % TOTAL_CARDS;
+      return (lead - i + TOTAL_CARDS) % TOTAL_CARDS;
+    }
+
+    function avgRot() {
+      let s = 0;
+      for (let i = 0; i < TOTAL_CARDS; i++) s += rot[i];
+      return s / TOTAL_CARDS;
+    }
+
+    function layout() {
+      const r = RADIUS;
+      cards.forEach((card, i) => {
+        const a = (baseAngle(i) + rot[i]) * Math.PI / 180;
+        const x = Math.cos(a) * r;
+        const y = -Math.sin(a) * r;
+        const tilt = (x / r) * 14;
+        const isActive = activeIdx === i;
+        const scale = 1 + (SCALE_MAX - 1) * (isActive ? liftAmt : 0);
+        const lift = isActive ? -LIFT_MAX * liftAmt : 0;
+        let z = Math.round(100 + Math.sin(a) * 80) * 100 + i;
+        if (isActive && liftAmt > 0.2) z += 50000;
+        card.style.transform =
+          `translate3d(${x}px, ${y + lift}px, 0) rotate(${tilt}deg) scale(${scale})`;
+        card.style.zIndex = z;
+        card.classList.toggle('is-active', isActive && liftAmt > 0.3);
+      });
+
+      // ME compass: sits on dashed ring at SPACE card angle,
+      // arrow points radially outward toward SPACE (like a compass)
+      if (meMarker) {
+        const aDeg = baseAngle(SPACE_IDX) + rot[SPACE_IDX];
+        const a = aDeg * Math.PI / 180;
+        const mx = Math.cos(a) * RING_RADIUS;
+        const my = -Math.sin(a) * RING_RADIUS;
+        meMarker.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+        const arrow = meMarker.querySelector('.me-arrow');
+        if (arrow) {
+          // ▲ points up by default; at aDeg=90 (top) → rot=0
+          const arrowRot = 90 - aDeg;
+          arrow.style.transform = `translate(-50%, -50%) rotate(${arrowRot}deg)`;
+        }
+      }
+    }
+
+    function tick(ts) {
+      if (!lastTs) lastTs = ts;
+      const dt = Math.min(32, ts - lastTs) / 16.67;
+      lastTs = ts;
+
+      const lead = leadIdx >= 0 ? leadIdx : 0;
+      const leadDiff = shortestDiff(rot[lead], targetRotation);
+      const leadDist = Math.abs(leadDiff);
+      const progress = moveSpan > 0.5
+        ? Math.min(1, 1 - leadDist / moveSpan)
+        : 1;
+
+      for (let i = 0; i < TOTAL_CARDS; i++) {
+        const rank = Math.min(trailRank(i, lead, moveDir), MAX_RANK_LAG);
+        const diff = shortestDiff(rot[i], targetRotation);
+        let ease;
+
+        if (moveDir > 0) {
+          const staggerSlow = 1 / (1 + rank * STAGGER * 10);
+          ease = EASE_RIGHT * staggerSlow;
+          const cardDist = Math.abs(diff);
+          const cardProg = moveSpan > 0.5
+            ? Math.min(1, 1 - cardDist / moveSpan)
+            : 1;
+          const eio = cardProg * (1 - cardProg) * 4;
+          ease *= 0.5 + 0.5 * Math.max(eio, 0.2);
+        } else if (moveDir < 0) {
+          if (rank === 0) {
+            ease = EASE_LEFT_LEAD;
+          } else {
+            const inertia = progress * progress * 0.1;
+            ease = EASE_LEFT_TRAIL / (1 + rank * 0.4) + inertia;
+          }
+        } else {
+          ease = 0.05;
+        }
+
+        const k = 1 - Math.pow(1 - ease, dt);
+        rot[i] = wrapRot(rot[i] + diff * k);
+      }
+
+      const liftK = 1 - Math.pow(1 - 0.08, dt);
+      liftAmt += ((activeIdx >= 0 ? 1 : 0) - liftAmt) * liftK;
+
+      if (leadDist < 0.15 && moveDir !== 0) {
+        let maxLag = 0;
+        for (let i = 0; i < TOTAL_CARDS; i++) {
+          maxLag = Math.max(maxLag, Math.abs(shortestDiff(rot[i], targetRotation)));
+        }
+        if (maxLag < 0.3) moveDir = 0;
+      }
+
+      layout();
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    function goTo(idx) {
+      clearTimeout(idleTimer);
+      hoverIdx = idx;
+      activeIdx = idx;
+      leadIdx = idx;
+
+      let t = 90 - baseAngle(idx);
+      const ref = rot[idx];
+      const delta = shortestDiff(ref, t);
+      t = ref + delta;
+
+      if (Math.abs(delta) > 0.5) {
+        moveDir = delta > 0 ? 1 : -1;
+        moveSpan = Math.max(Math.abs(delta), 1);
+      }
+      targetRotation = t;
+    }
+
+    function scheduleIdle() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        if (hoverIdx < 0) {
+          activeIdx = -1;
+          const ref = avgRot();
+          const delta = shortestDiff(ref, 0);
+          if (Math.abs(delta) > 0.5) {
+            moveDir = delta > 0 ? 1 : -1;
+            moveSpan = Math.max(Math.abs(delta), 1);
+            leadIdx = 0;
+          }
+          targetRotation = ref + delta;
+        }
+      }, IDLE_DELAY);
+    }
+
+    cards.forEach((card, i) => {
+      card.addEventListener('pointerenter', () => goTo(i));
+      card.addEventListener('pointerleave', () => {
+        if (hoverIdx === i) hoverIdx = -1;
+        scheduleIdle();
+      });
+    });
+
+    stage.addEventListener('pointerleave', () => {
+      hoverIdx = -1;
+      clearTimeout(idleTimer);
+      activeIdx = -1;
+      const ref = avgRot();
+      const delta = shortestDiff(ref, 0);
+      if (Math.abs(delta) > 0.5) {
+        moveDir = delta > 0 ? 1 : -1;
+        moveSpan = Math.max(Math.abs(delta), 1);
+        leadIdx = 0;
+      }
+      targetRotation = ref + delta;
+    });
+
+    layout();
+    window.addEventListener('resize', layout);
+
+    // Modal
+    const cardData = {
+      nebula: {
+        title: "Cosmic Visuals",
+        tag: "Motion / 3D",
+        content: `<p>Серія експериментальних візуалів, натхненних туманностями та космічними явищами. Поєднання 3D-рендеру та procedural текстур.</p>
+          <ul><li>Cinema 4D + Redshift</li><li>After Effects compositing</li><li>Колірна палітра: глибокий космос</li></ul>`
+      },
+      deep: {
+        title: "Deep Impact",
+        tag: "Brand / Campaign",
+        content: `<p>Концепт рекламної кампанії для науково-популярного проєкту. Метеорит як метафора несподіваних ідей.</p>
+          <ul><li>Key visual + motion</li><li>Poster series</li><li>Social media assets</li></ul>`
+      },
+      identity: {
+        title: "Personal Identity",
+        tag: "Branding",
+        content: `<p>Особистий логотип та візуальна система. Око в квітці — символ спостереження та творчого бачення.</p>
+          <ul><li>Logo design</li><li>Business cards</li><li>Digital assets</li></ul>`
+      },
+      about: {
+        title: "Cuong Nguyen",
+        tag: "About",
+        content: `<p><strong>Multimedia Designer</strong></p>
+          <p>Працюю на стику дизайну, анімації та інтерактивних медіа. Люблю чисті форми, сильний контраст і трохи хаосу в деталях.</p>
+          <ul><li>UI / UX Design</li><li>Motion Graphics</li><li>3D & Visualization</li><li>Brand Identity</li></ul>
+          <p style="margin-top:1rem;font-size:0.85rem;color:#666;">Based in Vietnam • Available for projects</p>`
+      },
+      polestar: {
+        title: "Polestar 1:1",
+        tag: "Automotive / Concept",
+        content: `<p>Концептуальна візуалізація для Polestar. Фокус на пропорціях 1:1 та мінімалістичній естетиці бренду.</p>
+          <ul><li>3D modeling & lighting</li><li>Product visualization</li><li>Look development</li></ul>`
+      },
+      casino: {
+        title: "Casino Noir",
+        tag: "Editorial / Branding",
+        content: `<p>Темна, розкішна естетика для казино-бренду. Гра з типографікою, золотом і глибоким чорним.</p>
+          <ul><li>Brand identity</li><li>Print & digital</li><li>Motion intro</li></ul>`
+      }
+    };
+
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modalBody');
+    const modalClose = document.getElementById('modalClose');
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const key = card.dataset.card;
+        const data = cardData[key];
+        if (!data) return;
+        modalBody.innerHTML = `<h2>${data.title}</h2><span class="tag">${data.tag}</span>${data.content}`;
+        modal.classList.add('active');
+      });
+    });
+    modalClose.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('active'); });
+  })();
+
+  /* ═══════════════════════════════════════════════════════════
+     2. VECTOR WORDMARK (vanilla port of Originkit component)
+  ═══════════════════════════════════════════════════════════ */
+  (function () {
+    const MAX_DPR = 2;
+    const REF_WIDTH = 1200;
+    const MAX_TEX = 4096;
+    const HANDLES = 3;
+    const CELL_ASPECT = 0.6;
+    const DRIFT_X = 0.08;
+    const DRIFT_Y = 0.04;
+    const DRIFT_RATE = 1.3;
+    const DRIFT_RATE_Y = 1.3 * 1.3;
+    const SWEEP_RATE = 0.5;
+    const SWEEP_BAND = 0.28;
+    const RESNAP = 0.2;
+    const DAMP_REF = 20;
+    const SPEED_REF = 50;
+    const LABEL_MAX = 0.6;
+    const DOT_DIAMETER = 4 / 440;
+    const DOT_PITCH = 12 / 440;
+
+    const clamp = (x, a, b) => (x < a ? a : x > b ? b : x);
+    const fract = (x) => x - Math.floor(x);
+
+    function parseColor(input, fallback) {
+      if (!input) return fallback;
+      let s = String(input).trim();
+      if (s.slice(0, 4).toLowerCase() === "var(") {
+        const comma = s.indexOf(",");
+        const close = s.lastIndexOf(")");
+        if (comma < 0 || close < comma) return fallback;
+        s = s.slice(comma + 1, close).trim();
+      }
+      if (s[0] === "#") {
+        let h = s.slice(1);
+        if (h.length === 3 || h.length === 4) {
+          let x = "";
+          for (const c of h) x += c + c;
+          h = x;
+        }
+        if (h.length === 6) h += "ff";
+        if (h.length !== 8 || /[^0-9a-f]/i.test(h)) return fallback;
+        return [
+          parseInt(h.slice(0, 2), 16) / 255,
+          parseInt(h.slice(2, 4), 16) / 255,
+          parseInt(h.slice(4, 6), 16) / 255,
+          parseInt(h.slice(6, 8), 16) / 255,
+        ];
+      }
+      const m = s.match(/^(rgba?|hsla?)\(([^)]*)\)$/i);
+      if (!m) return fallback;
+      const parts = m[2].split(/[\s,/]+/).filter((p) => p.length > 0);
+      if (parts.length < 3) return fallback;
+      const num = (t, scale) => {
+        const v = parseFloat(t);
+        if (!Number.isFinite(v)) return 0;
+        return t.indexOf("%") >= 0 ? (v / 100) * scale : v;
+      };
+      const alpha = parts.length > 3 ? clamp(num(parts[3], 1), 0, 1) : 1;
+      if (m[1].toLowerCase().slice(0, 3) === "rgb") {
+        return [
+          clamp(num(parts[0], 255) / 255, 0, 1),
+          clamp(num(parts[1], 255) / 255, 0, 1),
+          clamp(num(parts[2], 255) / 255, 0, 1),
+          alpha,
+        ];
+      }
+      const hh = fract(parseFloat(parts[0]) / 360);
+      const sat = clamp(num(parts[1], 1), 0, 1);
+      const li = clamp(num(parts[2], 1), 0, 1);
+      const q = li < 0.5 ? li * (1 + sat) : li + sat - li * sat;
+      const p = 2 * li - q;
+      const chan = (t) => {
+        let u = fract(t);
+        if (u < 1 / 6) return p + (q - p) * 6 * u;
+        if (u < 1 / 2) return q;
+        if (u < 2 / 3) return p + (q - p) * (2 / 3 - u) * 6;
+        return p;
+      };
+      return [chan(hh + 1 / 3), chan(hh), chan(hh - 1 / 3), alpha];
+    }
+
+    const VERT = `
+attribute vec2 aPos;
+varying vec2 vUv;
+void main() {
+    vUv = aPos * 0.5 + 0.5;
+    gl_Position = vec4(aPos, 0.0, 1.0);
+}`;
+
+    const FRAG = `
+precision highp float;
+uniform sampler2D uMap;
+uniform vec2 uRes;
+uniform vec2 uAtlas;
+uniform vec2 uPtr;
+uniform float uReach;
+uniform vec3 uText;
+uniform vec3 uShade;
+uniform vec4 uAccent;
+uniform vec2 uV0;
+uniform vec2 uV1;
+uniform vec2 uV2;
+uniform float uHalf;
+varying vec2 vUv;
+float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+}
+vec2 blurRG(vec2 uv, float e) {
+    vec4 sum = vec4(0.0);
+    for (int i = 0; i < 6; i++) {
+        float fi = float(i);
+        float th = radians(fi / 6.0 * 360.0);
+        vec2 dir = vec2(cos(th), sin(th));
+        vec2 off = dir * (hash(vec2(fi, uv.x + uv.y)) + e);
+        sum += texture2D(uMap, uv + off * e);
+    }
+    return (sum / 6.0).rg;
+}
+vec2 segment(vec2 p, vec2 a, vec2 b) {
+    vec2 ab = b - a;
+    vec2 ap = p - a;
+    float t = clamp(dot(ap, ab) / max(dot(ab, ab), 1e-8), 0.0, 1.0);
+    return vec2(length(ap - ab * t), t);
+}
+float stroke(float d, float lw, float px) {
+    return 1.0 - smoothstep(lw, lw + px, d);
+}
+float dashedLine(vec2 p, vec2 a, vec2 b, float lw, float px) {
+    vec2 s = segment(p, a, b);
+    float dash = step(0.5, fract(s.y * length(b - a) * 100.0));
+    return stroke(s.x, lw, px) * dash;
+}
+float boxEdge(vec2 p, vec2 c, float h, float lw, float px) {
+    vec2 q = abs(p - c) - vec2(h);
+    float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0);
+    return stroke(abs(d), lw, px);
+}
+void main() {
+    float aspect = uRes.x / uRes.y;
+    vec2 E = (vUv * uRes - (uRes - uAtlas) * 0.5) / uAtlas;
+    float inside = step(0.0, E.x) * step(E.x, 1.0) * step(0.0, E.y) * step(E.y, 1.0);
+    vec2 safeUv = clamp(E, 0.0, 1.0);
+    float b = clamp(1.0 - E.y * 3.5, 0.0, 1.0) * 0.008;
+    vec2 soft = blurRG(safeUv, b);
+    vec2 sharp = blurRG(safeUv, b * 0.1);
+    float d = length((vUv - uPtr) / vec2(1.0, aspect));
+    float k = 1.0 - pow(smoothstep(0.0, max(uReach, 1e-4), d), 3.0);
+    float mask = mix(soft.r, sharp.g, k) * inside;
+    vec3 fill = mix(uShade, uText, smoothstep(0.0, 1.0, E.y));
+    vec2 P = vec2(vUv.x * aspect, vUv.y);
+    float px = 1.0 / uRes.y;
+    float lw = px * 0.2;
+    float lines = max(
+        max(dashedLine(P, uV0, uV1, lw, px), dashedLine(P, uV1, uV2, lw, px)),
+        dashedLine(P, uV2, uV0, lw, px)
+    );
+    float boxes = max(
+        max(boxEdge(P, uV0, uHalf, lw, px), boxEdge(P, uV1, uHalf, lw, px)),
+        boxEdge(P, uV2, uHalf, lw, px)
+    );
+    float A = max(lines, boxes) * uAccent.a * (1.0 - vUv.y);
+    vec4 card = vec4(fill * mask, mask);
+    vec4 comp = vec4(uAccent.rgb * A, A) + card * (1.0 - A);
+    gl_FragColor = comp * pow(clamp(E.y, 0.0, 1.0), 0.7);
+}`;
+
+    function compile(gl, vs, fs) {
+      const make = (type, src) => {
+        const sh = gl.createShader(type);
+        gl.shaderSource(sh, src);
+        gl.compileShader(sh);
+        return sh;
+      };
+      const p = gl.createProgram();
+      gl.attachShader(p, make(gl.VERTEX_SHADER, vs));
+      gl.attachShader(p, make(gl.FRAGMENT_SHADER, fs));
+      gl.bindAttribLocation(p, 0, "aPos");
+      gl.linkProgram(p);
+      return p;
+    }
+
+    function fontString(f, px) {
+      return `${f.style} ${f.weight} ${px}px ${f.family}`;
+    }
+
+    function buildAtlas(text, f, drawFontPx, dpr) {
+      const probe = document.createElement("canvas").getContext("2d");
+      if (!probe) return null;
+      const setFont = (ctx, px) => {
+        ctx.font = fontString(f, px);
+        try {
+          if ("letterSpacing" in ctx) {
+            ctx.letterSpacing = f.letterSpacing;
+          }
+        } catch (e) {}
+      };
+      const measure = (px) => {
+        setFont(probe, px);
+        const m = probe.measureText(text);
+        const asc = m.actualBoundingBoxAscent || px * 0.8;
+        const desc = m.actualBoundingBoxDescent || px * 0.22;
+        return { w: Math.max(1, m.width), asc, desc };
+      };
+      let fpx = Math.max(8, drawFontPx * dpr);
+      let m = measure(fpx);
+      let pad = fpx * 0.12;
+      const over = Math.max(
+        (m.w + pad * 2) / MAX_TEX,
+        (m.asc + m.desc + pad * 2) / MAX_TEX
+      );
+      if (over > 1) {
+        fpx = Math.max(8, fpx / over);
+        m = measure(fpx);
+        pad = fpx * 0.12;
+      }
+      const w = Math.max(1, Math.ceil(m.w + pad * 2));
+      const h = Math.max(1, Math.ceil(m.asc + m.desc + pad * 2));
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, w, h);
+      setFont(ctx, fpx);
+      ctx.textBaseline = "alphabetic";
+      ctx.textAlign = "left";
+      ctx.globalCompositeOperation = "lighter";
+      ctx.fillStyle = "#ff0000";
+      ctx.fillText(text, pad, pad + m.asc);
+      const block = m.asc + m.desc;
+      ctx.strokeStyle = "#00ff00";
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = Math.max(1, block * DOT_DIAMETER);
+      ctx.setLineDash([0, Math.max(2, block * DOT_PITCH)]);
+      ctx.strokeText(text, pad, pad + m.asc);
+      const cssPerPx = drawFontPx / fpx;
+      return { canvas, cssW: w * cssPerPx, cssH: h * cssPerPx };
+    }
+
+    // Mount
+    const host = document.getElementById("wordmark");
+    if (!host) return;
+
+    const text = "PORTFOLIO";
+    const fontSpec = {
+      family: "Inter, system-ui, sans-serif",
+      weight: "800",
+      style: "normal",
+      size: 180,
+      letterSpacing: "-0.02em",
+    };
+    const background = "transparent";
+    const textColor = "#111111";
+    const shade = "#111111";
+    const accent = "rgba(227, 28, 35, 0.55)";
+    const reach = 220;
+    const speed = 50;
+    const damping = 55;
+    const hg = { size: 72, spread: 22, labels: false };
+    const accentRGBA = parseColor(accent, [1, 1, 1, 0.4]);
+
+    // Build DOM
+    host.style.cssText = `position:relative;overflow:hidden;background:${background};width:100%;height:100%;`;
+    const canvas = document.createElement("canvas");
+    canvas.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block;";
+    host.appendChild(canvas);
+
+    const attrs = {
+      alpha: true,
+      antialias: false,
+      depth: false,
+      stencil: false,
+      premultipliedAlpha: true,
+      powerPreference: "high-performance",
+    };
+    const gl = (canvas.getContext("webgl2", attrs) || canvas.getContext("webgl", attrs));
+    if (!gl) {
+      // fallback plain text
+      host.innerHTML = `<div style="font-family:Inter,sans-serif;font-weight:800;font-size:clamp(2.5rem,10vw,5.5rem);letter-spacing:-0.04em;text-align:center;line-height:1;color:#111;padding-top:1.2rem;">PORTFOLIO</div>`;
+      return;
+    }
+
+    const isGL2 = typeof WebGL2RenderingContext !== "undefined" && gl instanceof WebGL2RenderingContext;
+    const prog = compile(gl, VERT, FRAG);
+    const U = {
+      map: gl.getUniformLocation(prog, "uMap"),
+      res: gl.getUniformLocation(prog, "uRes"),
+      atlas: gl.getUniformLocation(prog, "uAtlas"),
+      ptr: gl.getUniformLocation(prog, "uPtr"),
+      reach: gl.getUniformLocation(prog, "uReach"),
+      text: gl.getUniformLocation(prog, "uText"),
+      shade: gl.getUniformLocation(prog, "uShade"),
+      accent: gl.getUniformLocation(prog, "uAccent"),
+      v0: gl.getUniformLocation(prog, "uV0"),
+      v1: gl.getUniformLocation(prog, "uV1"),
+      v2: gl.getUniformLocation(prog, "uV2"),
+      half: gl.getUniformLocation(prog, "uHalf"),
+    };
+
+    const quad = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(0);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    gl.disable(gl.BLEND);
+
+    const tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+    let alive = true;
+    let boxW = Math.max(1, host.offsetWidth);
+    let boxH = Math.max(1, host.offsetHeight);
+    let boxDirty = true;
+    let dpr = 1;
+    let bufW = 0;
+    let bufH = 0;
+    let atlasRatioW = 1;
+    let atlasRatioH = 1;
+    let atlasKey = "";
+
+    function drawFontPx() {
+      return fontSpec.size * (boxW / REF_WIDTH);
+    }
+
+    function resize() {
+      boxW = Math.max(1, host.offsetWidth);
+      boxH = Math.max(1, host.offsetHeight);
+      dpr = Math.min(MAX_DPR, window.devicePixelRatio || 1);
+      const w = Math.max(1, Math.round(boxW * dpr));
+      const h = Math.max(1, Math.round(boxH * dpr));
+      if (w === bufW && h === bufH) return;
+      bufW = w;
+      bufH = h;
+      canvas.width = w;
+      canvas.height = h;
+    }
+
+    function rebuildAtlas() {
+      const px = Math.max(8, drawFontPx());
+      const atlas = buildAtlas(text || " ", fontSpec, px, dpr);
+      if (!atlas) return;
+      atlasRatioW = Math.max(1e-4, atlas.cssW / px);
+      atlasRatioH = Math.max(1e-4, atlas.cssH / px);
+      if (typeof document !== "undefined" && document.fonts) {
+        try {
+          const probe = fontString(fontSpec, 64);
+          if (!document.fonts.check(probe)) {
+            document.fonts.load(probe, text).then(() => { if (alive) atlasKey = ""; }, () => {});
+          }
+        } catch (e) {}
+      }
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, atlas.canvas);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+      const cw = atlas.canvas.width;
+      const ch = atlas.canvas.height;
+      const pot = (cw & (cw - 1)) === 0 && (ch & (ch - 1)) === 0;
+      if (isGL2 || pot) {
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+      } else {
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      }
+    }
+
+    const target = { x: -0.5, y: 0.5 };
+    const eased = { x: -0.5, y: 0.5 };
+    const cells = [];
+    const verts = [];
+    for (let i = 0; i < HANDLES; i += 1) {
+      cells.push({ x: -0.5, y: 0.5 });
+      verts.push({ x: -0.5, y: 0.5 });
+    }
+    let hasPointer = false;
+    let sweepClock = 0;
+    let driftT = 0;
+
+    function snap(x, y, cw, ch) {
+      const cx = Math.floor(x / cw);
+      const cy = Math.floor(y / ch);
+      const found = [];
+      for (let i = -1; i <= 1; i += 1) {
+        for (let j = -1; j <= 1; j += 1) {
+          const px = (cx + i + 0.5) * cw;
+          const py = (cy + j + 0.5) * ch;
+          found.push({ x: px, y: py, d: Math.hypot(px - x, py - y) });
+        }
+      }
+      found.sort((a, b) => a.d - b.d);
+      for (let i = 0; i < HANDLES; i += 1) {
+        cells[i].x = found[i + 1].x;
+        cells[i].y = found[i + 1].y;
+      }
+    }
+
+    const onMove = (e) => {
+      hasPointer = true;
+      const r = host.getBoundingClientRect();
+      if (r.width <= 0 || r.height <= 0) return;
+      target.x = (e.clientX - r.left) / r.width;
+      target.y = 1 - (e.clientY - r.top) / r.height;
+    };
+    host.addEventListener("pointermove", onMove);
+    host.addEventListener("pointerleave", () => { hasPointer = false; });
+
+    let rafId = 0;
+    let last = 0;
+    let running = true;
+
+    function sync() {
+      if (boxDirty) {
+        boxDirty = false;
+        resize();
+      }
+      const key = [
+        text,
+        fontSpec.family,
+        fontSpec.weight,
+        fontSpec.style,
+        fontSpec.letterSpacing,
+        dpr,
+        Math.ceil(Math.max(8, drawFontPx()) / 64),
+      ].join("|");
+      if (key !== atlasKey) {
+        atlasKey = key;
+        rebuildAtlas();
+      }
+    }
+
+    function step(dt) {
+      const rate = Math.max(0, speed) / SPEED_REF;
+      const cw = Math.max(0.01, hg.spread / 100);
+      const ch = cw * CELL_ASPECT;
+      const aspect = boxW / boxH;
+      if (!hasPointer) {
+        const band = (atlasRatioH * Math.max(8, drawFontPx())) / boxH;
+        target.x += dt * SWEEP_RATE * rate;
+        target.y = (1 - band) / 2 + SWEEP_BAND * band;
+        if (target.x > 1.5) {
+          target.x = -0.5;
+          eased.x = -0.5;
+        }
+        sweepClock += dt;
+        if (sweepClock >= RESNAP) {
+          sweepClock = 0;
+          snap(target.x * aspect, target.y, cw, ch);
+        }
+      } else {
+        snap(target.x * aspect, target.y, cw, ch);
+      }
+      const damp = clamp((damping / 100) * DAMP_REF * dt, 0, 1);
+      eased.x += (target.x - eased.x) * damp;
+      eased.y += (target.y - eased.y) * damp;
+      driftT += dt * rate;
+      for (let i = 0; i < HANDLES; i += 1) {
+        const c = cells[i];
+        const sx = Math.round(c.x / cw - 0.5);
+        const sy = Math.round(c.y / ch - 0.5);
+        const h1 = fract(Math.sin(sx * 127.1 + sy * 311.7) * 43758.5453);
+        const h2 = fract(Math.sin(sx * 269.5 + sy * 183.3) * 43758.5453);
+        verts[i].x = c.x + DRIFT_X * cw * Math.sin(driftT * DRIFT_RATE + h1 * Math.PI * 2);
+        verts[i].y = c.y + DRIFT_Y * ch * Math.sin(driftT * DRIFT_RATE_Y + h2 * Math.PI * 2);
+      }
+    }
+
+    function draw() {
+      const tc = parseColor(textColor, [0.07, 0.07, 0.07, 1]);
+      const sc = parseColor(shade, [0.07, 0.07, 0.07, 1]);
+      const ac = accentRGBA;
+      gl.viewport(0, 0, bufW, bufH);
+      gl.useProgram(prog);
+      gl.uniform1i(U.map, 0);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.uniform2f(U.res, boxW, boxH);
+      const px = Math.max(8, drawFontPx());
+      gl.uniform2f(U.atlas, atlasRatioW * px, atlasRatioH * px);
+      gl.uniform2f(U.ptr, eased.x, eased.y);
+      gl.uniform1f(U.reach, Math.max(1, reach) / boxW);
+      gl.uniform3f(U.text, tc[0], tc[1], tc[2]);
+      gl.uniform3f(U.shade, sc[0], sc[1], sc[2]);
+      gl.uniform4f(U.accent, ac[0], ac[1], ac[2], ac[3]);
+      gl.uniform2f(U.v0, verts[0].x, verts[0].y);
+      gl.uniform2f(U.v1, verts[1].x, verts[1].y);
+      gl.uniform2f(U.v2, verts[2].x, verts[2].y);
+      gl.uniform1f(U.half, hg.size / 2 / boxH);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+
+    const frame = (now) => {
+      const dt = last ? Math.min(0.1, (now - last) / 1000) : 0;
+      last = now;
+      sync();
+      step(dt);
+      draw();
+      rafId = requestAnimationFrame(frame);
+    };
+
+    const gate = () => {
+      if (running && !document.hidden) {
+        if (!rafId) {
+          last = 0;
+          rafId = requestAnimationFrame(frame);
+        }
+      } else if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    };
+
+    const ro = new ResizeObserver(() => { boxDirty = true; });
+    ro.observe(host);
+    document.addEventListener("visibilitychange", gate);
+    if (typeof document !== "undefined" && document.fonts) {
+      document.fonts.ready.then(() => { if (alive) atlasKey = ""; }, () => {});
+    }
+    gate();
+  })();
+  </script>
+</body>
+</html>
