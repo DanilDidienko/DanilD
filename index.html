@@ -21,11 +21,16 @@
       box-sizing: border-box;
     }
 
+    html, body {
+      width: 100%;
+      max-width: 100%;
+    }
+
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: var(--bg);
-      min-height: 100vh;
-      height: 100vh;
+      min-height: 100dvh;
+      height: 100dvh;
       overflow: hidden;
       color: var(--dark);
       display: flex;
@@ -907,18 +912,98 @@
     .modal ul li:last-child { border-bottom: none; }
 
     @media (max-width: 700px) {
+      body {
+        height: auto;
+        min-height: 100dvh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 0.75rem 0.6rem 1.5rem;
+      }
+
+      .welcome {
+        font-size: 0.7rem;
+        letter-spacing: 0.22em;
+      }
+
+      .title-wrapper {
+        height: clamp(72px, 22vw, 110px);
+        margin: 0 auto 0.4rem;
+      }
+
+      .meta {
+        font-size: 0.62rem;
+        letter-spacing: 0.12em;
+        max-width: 100%;
+        padding: 0 0.25rem;
+        gap: 0.5rem;
+      }
+
       .card {
-        width: 140px;
-        height: 200px;
-        margin-left: -70px;
-        margin-top: -100px;
+        width: 118px;
+        height: 168px;
+        margin-left: -59px;
+        margin-top: -84px;
         border-radius: 14px;
       }
-      .stage {
-        min-height: 420px;
-        height: calc(100vh - 240px);
+
+      .card-red .logo { width: 64px; height: 64px; }
+      .card-polestar .ratio { font-size: 1.8rem; }
+      .card-label, .card-empire .card-label, .card-nature .card-label,
+      .card-knight .card-label, .card-zhuk .card-label, .card-cats .card-label,
+      .card-sea .card-label, .card-site .card-label, .card-gramota-photo .card-label,
+      .card-read .card-label, .card-chess .card-label, .card-medals .card-label {
+        font-size: 0.52rem !important;
+        letter-spacing: 0.08em !important;
+        bottom: 10px !important;
       }
-      .title-wrapper { height: 120px; }
+
+      .stage {
+        min-height: 360px;
+        height: min(62dvh, 520px);
+        margin-top: 0.25rem;
+        overflow: hidden;
+        touch-action: pan-y;
+      }
+
+      .circle-track,
+      .guide-ring {
+        bottom: -70px;
+      }
+
+      .guide-ring-circle {
+        width: 220px;
+        height: 220px;
+        margin-left: -110px;
+        margin-top: -110px;
+      }
+
+      .hint {
+        bottom: 10px;
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+        white-space: nowrap;
+      }
+
+      .modal-content {
+        width: 94%;
+        padding: 1.4rem 1.15rem 1.5rem;
+        max-height: 88dvh;
+        border-radius: 16px;
+      }
+      .modal h2 { font-size: 1.25rem; }
+    }
+
+    @media (max-width: 380px) {
+      .card {
+        width: 100px;
+        height: 142px;
+        margin-left: -50px;
+        margin-top: -71px;
+      }
+      .stage {
+        min-height: 320px;
+        height: min(58dvh, 460px);
+      }
     }
 
     @keyframes fadeUp {
@@ -957,7 +1042,7 @@
     <div class="circle-track" id="circleTrack">
       <!-- cards injected by JS -->
     </div>
-    <div class="hint">hover a card</div>
+    <div class="hint">свайпни або натисни картку</div>
   </div>
 
   <div class="modal" id="modal">
@@ -975,19 +1060,45 @@
      Guide ring r=200 + ME compass always points at SPACE card.
   ═══════════════════════════════════════════════════════════ */
   (function () {
-    const RADIUS = 500;
-    const RING_RADIUS = 200;
+    const RADIUS_DESKTOP = 500;
+    const RING_RADIUS_DESKTOP = 200;
+    let RADIUS = RADIUS_DESKTOP;
+    let RING_RADIUS = RING_RADIUS_DESKTOP;
     const SPACE_IDX = 1; // photo card (ME compass)
     // ~14 cards → arc step ≈ card width, only corner overlap
     const TOTAL_CARDS = 14;
-    const LIFT_MAX = 20;
-    const SCALE_MAX = 1.06;
-    const EASE = 0.045;
+    const LIFT_MAX = 24;
+    const SCALE_MAX = 1.08;
     const IDLE_DELAY = 450;
+    const EASE_RIGHT = 0.13;
+    const EASE_LEFT_LEAD = 0.09;
+    const EASE_LEFT_TRAIL = 0.025;
+    const STAGGER = 0.03;
+    const MAX_RANK_LAG = 8;
 
     const track = document.getElementById('circleTrack');
     const stage = document.getElementById('stage');
     const meMarker = document.getElementById('meMarker');
+    const guideRingCircle = document.getElementById('guideRingCircle');
+
+    function sizeCarousel() {
+      const w = stage.clientWidth || window.innerWidth;
+      const h = stage.clientHeight || window.innerHeight;
+      const isMobile = window.innerWidth <= 700;
+      const cardHalf = isMobile ? (window.innerWidth <= 380 ? 50 : 59) : 93.5;
+      const pad = isMobile ? 8 : 24;
+      const maxR = Math.max(140, Math.min(w / 2 - cardHalf - pad, h * 0.72));
+      RADIUS = isMobile ? Math.min(260, maxR) : RADIUS_DESKTOP;
+      RING_RADIUS = isMobile ? Math.max(70, RADIUS * 0.42) : RING_RADIUS_DESKTOP;
+      if (guideRingCircle) {
+        const d = RING_RADIUS * 2;
+        guideRingCircle.style.width = d + 'px';
+        guideRingCircle.style.height = d + 'px';
+        guideRingCircle.style.marginLeft = -RING_RADIUS + 'px';
+        guideRingCircle.style.marginTop = -RING_RADIUS + 'px';
+      }
+    }
+    sizeCarousel();
 
     const realCards = [
       `<div class="card card-site" data-card="site">
@@ -1085,15 +1196,24 @@
     const cards = Array.from(track.querySelectorAll('.card'));
     const step = 360 / TOTAL_CARDS;
 
-    // Home: photo (SPACE) card at top; site card sits to its left
+    // Home: photo (SPACE) card at top
     const homeRotation = SPACE_IDX * (360 / TOTAL_CARDS);
-    let currentRotation = homeRotation;
+    const rot = new Float32Array(TOTAL_CARDS);
+    for (let i = 0; i < TOTAL_CARDS; i++) rot[i] = homeRotation;
     let targetRotation = homeRotation;
+    let moveDir = 0;
+    let leadIdx = SPACE_IDX;
     let activeIdx = -1;
     let hoverIdx = -1;
-    let liftAmt = 0;       // smoothed 0..1 for active lift/scale
+    let liftAmt = 0;
     let idleTimer = null;
     let lastTs = 0;
+    let moveSpan = 1;
+    let drag = null;
+
+    function isCoarse() {
+      return window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 700;
+    }
 
     function baseAngle(i) {
       return 90 - i * step;
@@ -1106,37 +1226,61 @@
       return d;
     }
 
+    function wrapRot(v) {
+      if (v > 360 || v < -360) {
+        v = ((v % 360) + 360) % 360;
+        if (v > 180) v -= 360;
+      }
+      return v;
+    }
+
+    function trailRank(i, lead, dir) {
+      if (dir >= 0) return (i - lead + TOTAL_CARDS) % TOTAL_CARDS;
+      return (lead - i + TOTAL_CARDS) % TOTAL_CARDS;
+    }
+
+    function avgRot() {
+      let s = 0;
+      for (let i = 0; i < TOTAL_CARDS; i++) s += rot[i];
+      return s / TOTAL_CARDS;
+    }
+
+    function setTarget(t, lead) {
+      const ref = rot[lead >= 0 ? lead : leadIdx] ?? avgRot();
+      const delta = shortestDiff(ref, t);
+      if (Math.abs(delta) > 0.5) {
+        moveDir = delta > 0 ? 1 : -1;
+        moveSpan = Math.max(Math.abs(delta), 1);
+      }
+      targetRotation = ref + delta;
+    }
+
     function layout() {
       const r = RADIUS;
       cards.forEach((card, i) => {
-        const a = (baseAngle(i) + currentRotation) * Math.PI / 180;
+        const a = (baseAngle(i) + rot[i]) * Math.PI / 180;
         const x = Math.cos(a) * r;
         const y = -Math.sin(a) * r;
         const tilt = (x / r) * 14;
         const isActive = activeIdx === i;
         const scale = 1 + (SCALE_MAX - 1) * (isActive ? liftAmt : 0);
         const lift = isActive ? -LIFT_MAX * liftAmt : 0;
-        // Stable depth stack: higher on the arc (toward top) = higher z.
-        // Never boost on hover — avoids flicker in overlap zones.
-        // Secondary tie-break by index so left/right order stays consistent.
-        const z = Math.round(100 + Math.sin(a) * 80) * 100 + i;
+        let z = Math.round(100 + Math.sin(a) * 80) * 100 + i;
+        if (isActive && liftAmt > 0.2) z += 50000;
         card.style.transform =
           `translate3d(${x}px, ${y + lift}px, 0) rotate(${tilt}deg) scale(${scale})`;
         card.style.zIndex = z;
         card.classList.toggle('is-active', isActive && liftAmt > 0.3);
       });
 
-      // ME compass: sits on dashed ring at SPACE card angle,
-      // arrow points radially outward toward SPACE (like a compass)
       if (meMarker) {
-        const aDeg = baseAngle(SPACE_IDX) + currentRotation;
+        const aDeg = baseAngle(SPACE_IDX) + rot[SPACE_IDX];
         const a = aDeg * Math.PI / 180;
         const mx = Math.cos(a) * RING_RADIUS;
         const my = -Math.sin(a) * RING_RADIUS;
         meMarker.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
         const arrow = meMarker.querySelector('.me-arrow');
         if (arrow) {
-          // ▲ points up by default; at aDeg=90 (top) → rot=0
           const arrowRot = 90 - aDeg;
           arrow.style.transform = `translate(-50%, -50%) rotate(${arrowRot}deg)`;
         }
@@ -1145,22 +1289,55 @@
 
     function tick(ts) {
       if (!lastTs) lastTs = ts;
-      const dt = Math.min(32, ts - lastTs) / 16.67; // normalize ~60fps units
+      const dt = Math.min(32, ts - lastTs) / 16.67;
       lastTs = ts;
 
-      const diff = shortestDiff(currentRotation, targetRotation);
-      // frame-rate independent exponential ease
-      const k = 1 - Math.pow(1 - EASE, dt);
-      currentRotation += diff * k;
+      const lead = leadIdx >= 0 ? leadIdx : 0;
+      const leadDiff = shortestDiff(rot[lead], targetRotation);
+      const leadDist = Math.abs(leadDiff);
+      const progress = moveSpan > 0.5
+        ? Math.min(1, 1 - leadDist / moveSpan)
+        : 1;
 
-      // keep currentRotation from drifting unbounded
-      if (currentRotation > 360 || currentRotation < -360) {
-        currentRotation = ((currentRotation % 360) + 360) % 360;
-        if (currentRotation > 180) currentRotation -= 360;
+      for (let i = 0; i < TOTAL_CARDS; i++) {
+        const rank = Math.min(trailRank(i, lead, moveDir), MAX_RANK_LAG);
+        const diff = shortestDiff(rot[i], targetRotation);
+        let ease;
+
+        if (moveDir > 0) {
+          const staggerSlow = 1 / (1 + rank * STAGGER * 10);
+          ease = EASE_RIGHT * staggerSlow;
+          const cardDist = Math.abs(diff);
+          const cardProg = moveSpan > 0.5
+            ? Math.min(1, 1 - cardDist / moveSpan)
+            : 1;
+          const eio = cardProg * (1 - cardProg) * 4;
+          ease *= 0.5 + 0.5 * Math.max(eio, 0.2);
+        } else if (moveDir < 0) {
+          if (rank === 0) {
+            ease = EASE_LEFT_LEAD;
+          } else {
+            const inertia = progress * progress * 0.1;
+            ease = EASE_LEFT_TRAIL / (1 + rank * 0.4) + inertia;
+          }
+        } else {
+          ease = 0.05;
+        }
+
+        const k = 1 - Math.pow(1 - ease, dt);
+        rot[i] = wrapRot(rot[i] + diff * k);
       }
 
-      const liftTarget = activeIdx >= 0 ? 1 : 0;
-      liftAmt += (liftTarget - liftAmt) * k;
+      const liftK = 1 - Math.pow(1 - 0.08, dt);
+      liftAmt += ((activeIdx >= 0 ? 1 : 0) - liftAmt) * liftK;
+
+      if (leadDist < 0.15 && moveDir !== 0) {
+        let maxLag = 0;
+        for (let i = 0; i < TOTAL_CARDS; i++) {
+          maxLag = Math.max(maxLag, Math.abs(shortestDiff(rot[i], targetRotation)));
+        }
+        if (maxLag < 0.3) moveDir = 0;
+      }
 
       layout();
       requestAnimationFrame(tick);
@@ -1171,41 +1348,80 @@
       clearTimeout(idleTimer);
       hoverIdx = idx;
       activeIdx = idx;
-      // bring card to top (90°)
+      leadIdx = idx;
       let t = 90 - baseAngle(idx);
-      // choose shortest path relative to *current* rotation
-      t = currentRotation + shortestDiff(currentRotation, t);
-      targetRotation = t;
+      setTarget(t, idx);
+    }
+
+    function goHome() {
+      activeIdx = -1;
+      leadIdx = SPACE_IDX;
+      setTarget(homeRotation, SPACE_IDX);
     }
 
     function scheduleIdle() {
       clearTimeout(idleTimer);
       idleTimer = setTimeout(() => {
-        if (hoverIdx < 0) {
-          activeIdx = -1;
-          // gently return to photo (ME) at top
-          targetRotation = currentRotation + shortestDiff(currentRotation, homeRotation);
-        }
+        if (hoverIdx < 0 && !drag) goHome();
       }, IDLE_DELAY);
     }
 
     cards.forEach((card, i) => {
-      card.addEventListener('pointerenter', () => goTo(i));
-      card.addEventListener('pointerleave', () => {
+      card.addEventListener('pointerenter', (e) => {
+        if (e.pointerType === 'touch' || isCoarse()) return;
+        goTo(i);
+      });
+      card.addEventListener('pointerleave', (e) => {
+        if (e.pointerType === 'touch' || isCoarse()) return;
         if (hoverIdx === i) hoverIdx = -1;
         scheduleIdle();
       });
     });
 
     stage.addEventListener('pointerleave', () => {
+      if (isCoarse()) return;
       hoverIdx = -1;
       clearTimeout(idleTimer);
-      activeIdx = -1;
-      targetRotation = currentRotation + shortestDiff(currentRotation, homeRotation);
+      goHome();
     });
 
     layout();
-    window.addEventListener('resize', layout);
+    window.addEventListener('resize', () => {
+      sizeCarousel();
+      layout();
+    });
+
+    stage.addEventListener('pointerdown', (e) => {
+      if (!isCoarse()) return;
+      drag = { id: e.pointerId, x: e.clientX, rot: avgRot(), moved: false };
+      try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const dx = e.clientX - drag.x;
+      if (Math.abs(dx) > 6) drag.moved = true;
+      const next = drag.rot + dx * 0.28;
+      const delta = shortestDiff(avgRot(), next);
+      leadIdx = SPACE_IDX;
+      if (Math.abs(delta) > 0.2) {
+        moveDir = delta > 0 ? 1 : -1;
+        moveSpan = Math.max(Math.abs(delta), 1);
+      }
+      targetRotation = next;
+      activeIdx = -1;
+      hoverIdx = -1;
+    });
+    function endDrag(e) {
+      if (!drag || (e && e.pointerId !== drag.id)) return;
+      const wasSwipe = drag.moved;
+      drag = null;
+      if (wasSwipe) {
+        hoverIdx = -1;
+        scheduleIdle();
+      }
+    }
+    stage.addEventListener('pointerup', endDrag);
+    stage.addEventListener('pointercancel', endDrag);
 
     // Modal
     const cardData = {
@@ -1245,7 +1461,7 @@
         content: `<p>Лицарство — особливий суспільний стан у середньовічній Європі, який об’єднував воїнів-феодалів.</p>
           <p>Не лише військова, а й культурна та моральна традиція: кодекс честі, відвага, вірність, захист слабких.</p>
           <ul><li>Історична презентація</li><li>Візуальний ряд епохи</li><li>Структура та типографіка</li></ul>
-          <a class="pdf-link" href="Лицарство.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
+          <a class="pdf-link" href="Lytsarstvo.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
       },
       zhuk: {
         title: "Михайло Жук",
@@ -1253,7 +1469,7 @@
         content: `<p>Презентація про українського художника Михайла Жука — модерн, символізм і витончена графіка.</p>
           <p>Роботи наповнені рослинними орнаментами, м’якими тонами та поетичною атмосферою.</p>
           <ul><li>Історія мистецтва</li><li>Візуальний наратив</li><li>Типографіка в стилі модерн</li></ul>
-          <a class="pdf-link" href="Михайло.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
+          <a class="pdf-link" href="Mykhailo.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
       },
       cats: {
         title: "Породи котів",
@@ -1261,7 +1477,7 @@
         content: `<p>Презентація про породи котів — від рудих і білих до чорних і довгошерстих.</p>
           <p>Яскравий фотоколаж і проста структура для легкого перегляду.</p>
           <ul><li>Фотографія</li><li>Колажна композиція</li><li>Інфодизайн</li></ul>
-          <a class="pdf-link" href="Породи.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
+          <a class="pdf-link" href="Porody.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
       },
       sea: {
         title: "Морська хвороба",
@@ -1269,7 +1485,7 @@
         content: `<p>Презентація про морську хворобу — причини, симптоми та як з нею справлятися в морі.</p>
           <p>Спокійна океанська естетика й чиста типографіка.</p>
           <ul><li>Інформаційний дизайн</li><li>Фото + типографіка</li><li>Структура слайдів</li></ul>
-          <a class="pdf-link" href="Морська_хвороба.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
+          <a class="pdf-link" href="Morska_khvoroba.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
       },
       olymp: {
         title: "Олімпіада з хімії",
@@ -1318,7 +1534,12 @@
     const modalClose = document.getElementById('modalClose');
 
     cards.forEach(card => {
-      card.addEventListener('click', () => {
+      card.addEventListener('click', (e) => {
+        if (drag && drag.moved) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         const key = card.dataset.card;
         const data = cardData[key];
         if (!data) return;
