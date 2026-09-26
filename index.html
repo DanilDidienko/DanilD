@@ -300,6 +300,464 @@
       100% { background-position: 0% 50%; }
     }
 
+    /* EmpireCraft card — Minecraft / gold accents */
+    .card-empire {
+      background: #0d0d0d;
+    }
+    .card-empire .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-empire .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      display: block;
+      filter: saturate(1.1) contrast(1.05);
+    }
+    .card-empire .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 45%, rgba(0,0,0,0.75) 100%);
+      pointer-events: none;
+    }
+    .card-empire .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #f0d060;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      z-index: 2;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+    .card-empire .card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(240, 208, 96, 0.2);
+      border: 1px solid rgba(240, 208, 96, 0.5);
+      color: #f0d060;
+      font-size: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 3px 8px;
+      border-radius: 4px;
+      z-index: 2;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Nature card — green leaves */
+    .card-nature {
+      background: #0a1f12;
+    }
+    .card-nature .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-nature .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .card-nature .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,31,18,0.15) 0%, rgba(10,31,18,0.85) 100%);
+      pointer-events: none;
+    }
+    .card-nature .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #c8f0d0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+    .card-nature .leaf-deco {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 1.1rem;
+      opacity: 0.7;
+      z-index: 2;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+    }
+
+    /* Knighthood card — dark grey #262626 */
+    .card-knight {
+      background: #262626;
+    }
+    .card-knight .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-knight .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+      filter: grayscale(0.35) contrast(1.1);
+    }
+    .card-knight .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(38,38,38,0.92) 100%);
+      pointer-events: none;
+    }
+    .card-knight .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 12px;
+      right: 12px;
+      text-align: center;
+      color: #d0d0d0;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      z-index: 2;
+      line-height: 1.3;
+    }
+
+    /* Mykhailo Zhuk — art nouveau / warm tones */
+    .card-zhuk {
+      background: #1a1410;
+    }
+    .card-zhuk .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-zhuk .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .card-zhuk .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(20,12,8,0.9) 100%);
+      pointer-events: none;
+    }
+    .card-zhuk .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #f5e6d0;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      z-index: 2;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Cat breeds — warm / playful */
+    .card-cats {
+      background: #1a1816;
+    }
+    .card-cats .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-cats .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .card-cats .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 35%, rgba(0,0,0,0.8) 100%);
+      pointer-events: none;
+    }
+    .card-cats .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      z-index: 2;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+    }
+
+    /* Seasickness — ocean blue */
+    .card-sea {
+      background: #0a1a28;
+    }
+    .card-sea .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-sea .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 60%;
+      display: block;
+    }
+    .card-sea .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(5,20,35,0.85) 100%);
+      pointer-events: none;
+    }
+    .card-sea .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #e8f4ff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      z-index: 2;
+      line-height: 1.3;
+    }
+
+    /* School site card — desk / green tones */
+    .card-site {
+      background: #1a2e24;
+    }
+    .card-site .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-site .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .card-site .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(15,30,22,0.88) 100%);
+      pointer-events: none;
+    }
+    .card-site .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #e8f0ea;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    /* Certificate cards — photo covers */
+    .card-gramota-photo {
+      background: #0d1840;
+    }
+    .card-gramota-photo .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-gramota-photo .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .card-gramota-photo .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 45%, rgba(10,15,40,0.9) 100%);
+      pointer-events: none;
+    }
+    .card-gramota-photo .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 8px;
+      right: 8px;
+      text-align: center;
+      color: #fff;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 2;
+      line-height: 1.3;
+    }
+
+    /* Reading card — book photo */
+    .card-read {
+      background: #1a1210;
+    }
+    .card-read .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-read .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .card-read .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(15,8,5,0.88) 100%);
+      pointer-events: none;
+    }
+    .card-read .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #f0dcc8;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    /* Chess card */
+    .card-chess {
+      background: #0a0a0a;
+    }
+    .card-chess .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-chess .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .card-chess .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.85) 100%);
+      pointer-events: none;
+    }
+    .card-chess .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #f5f0e6;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    /* Automodelling medals */
+    .card-medals {
+      background: #2a2418;
+    }
+    .card-medals .card-cover {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .card-medals .card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+    }
+    .card-medals .card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(20,15,8,0.9) 100%);
+      pointer-events: none;
+    }
+    .card-medals .card-label {
+      position: absolute;
+      bottom: 14px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: #f5e6c8;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    /* Modal PDF link button */
+    .modal .pdf-link {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.55rem 1.1rem;
+      background: var(--red);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .modal .pdf-link:hover {
+      background: #c4181e;
+      transform: translateY(-1px);
+    }
+
     /* Dashed guide ring — same center as cards, r = 200px */
     .guide-ring {
       position: absolute;
@@ -519,7 +977,7 @@
   (function () {
     const RADIUS = 500;
     const RING_RADIUS = 200;
-    const SPACE_IDX = 0; // nebula / SPACE card
+    const SPACE_IDX = 1; // photo card (ME compass)
     // ~14 cards → arc step ≈ card width, only corner overlap
     const TOTAL_CARDS = 14;
     const LIFT_MAX = 20;
@@ -532,10 +990,82 @@
     const meMarker = document.getElementById('meMarker');
 
     const realCards = [
+      `<div class="card card-site" data-card="site">
+        <div class="card-cover">
+          <img src="cards/site.png" alt="Шкільний сайт">
+        </div>
+        <div class="card-label">Шкільний сайт</div>
+      </div>`,
       `<div class="card card-space" data-card="nebula">
         <div class="space-photo">
           <img src="me.png" alt="Діденко Данило">
         </div>
+      </div>`,
+      `<div class="card card-empire" data-card="empire">
+        <div class="card-cover">
+          <img src="cards/empirecraft.png" alt="EmpireCraft">
+        </div>
+        <div class="card-label">EmpireCraft</div>
+      </div>`,
+      `<div class="card card-nature" data-card="nature">
+        <div class="card-cover">
+          <img src="cards/nature-1.jpg" alt="Природа">
+        </div>
+        <div class="card-label">Природа</div>
+      </div>`,
+      `<div class="card card-knight" data-card="knight">
+        <div class="card-cover">
+          <img src="cards/knight-02.jpg" alt="Лицарство">
+        </div>
+        <div class="card-label">Лицарство<br>в Західній Європі</div>
+      </div>`,
+      `<div class="card card-zhuk" data-card="zhuk">
+        <div class="card-cover">
+          <img src="cards/zhuk-1.jpg" alt="Михайло Жук">
+        </div>
+        <div class="card-label">Михайло Жук</div>
+      </div>`,
+      `<div class="card card-cats" data-card="cats">
+        <div class="card-cover">
+          <img src="cards/cats-1.jpg" alt="Породи котів">
+        </div>
+        <div class="card-label">Породи котів</div>
+      </div>`,
+      `<div class="card card-sea" data-card="sea">
+        <div class="card-cover">
+          <img src="cards/sea-01.jpg" alt="Морська хвороба">
+        </div>
+        <div class="card-label">Морська<br>хвороба</div>
+      </div>`,
+      `<div class="card card-gramota-photo" data-card="olymp">
+        <div class="card-cover">
+          <img src="cards/olymp.png" alt="Олімпіада з хімії">
+        </div>
+        <div class="card-label">Олімпіада з хімії</div>
+      </div>`,
+      `<div class="card card-gramota-photo" data-card="mechnikov">
+        <div class="card-cover">
+          <img src="cards/mechnikov.png" alt="Турнір Мечникова">
+        </div>
+        <div class="card-label">Турнір Мечникова</div>
+      </div>`,
+      `<div class="card card-read" data-card="read">
+        <div class="card-cover">
+          <img src="cards/book.png" alt="Читання">
+        </div>
+        <div class="card-label">Читання</div>
+      </div>`,
+      `<div class="card card-chess" data-card="chess">
+        <div class="card-cover">
+          <img src="cards/chess.png" alt="Шахи">
+        </div>
+        <div class="card-label">Шахи</div>
+      </div>`,
+      `<div class="card card-medals" data-card="medals">
+        <div class="card-cover">
+          <img src="cards/medals.png" alt="Автомоделювання">
+        </div>
+        <div class="card-label">Автомоделювання</div>
       </div>`
     ];
 
@@ -543,8 +1073,11 @@
     for (let i = 0; i < TOTAL_CARDS; i++) {
       if (i < realCards.length) {
         parts.push(realCards[i].replace(/class="card/, `data-idx="${i}" class="card`));
+      } else if (i === TOTAL_CARDS - 1) {
+        // one empty "future" card at the back of the circle
+        parts.push(`<div class="card card-empty" data-idx="${i}" data-card="future"></div>`);
       } else {
-        parts.push(`<div class="card card-empty" data-idx="${i}"></div>`);
+        parts.push(`<div class="card card-empty" data-idx="${i}" style="opacity:0;pointer-events:none;"></div>`);
       }
     }
     track.innerHTML = parts.join('');
@@ -552,8 +1085,10 @@
     const cards = Array.from(track.querySelectorAll('.card'));
     const step = 360 / TOTAL_CARDS;
 
-    let currentRotation = 0;
-    let targetRotation = 0;
+    // Home: photo (SPACE) card at top; site card sits to its left
+    const homeRotation = SPACE_IDX * (360 / TOTAL_CARDS);
+    let currentRotation = homeRotation;
+    let targetRotation = homeRotation;
     let activeIdx = -1;
     let hoverIdx = -1;
     let liftAmt = 0;       // smoothed 0..1 for active lift/scale
@@ -648,8 +1183,8 @@
       idleTimer = setTimeout(() => {
         if (hoverIdx < 0) {
           activeIdx = -1;
-          // gently return toward 0 without forced snap
-          targetRotation = currentRotation + shortestDiff(currentRotation, 0);
+          // gently return to photo (ME) at top
+          targetRotation = currentRotation + shortestDiff(currentRotation, homeRotation);
         }
       }, IDLE_DELAY);
     }
@@ -666,7 +1201,7 @@
       hoverIdx = -1;
       clearTimeout(idleTimer);
       activeIdx = -1;
-      targetRotation = currentRotation + shortestDiff(currentRotation, 0);
+      targetRotation = currentRotation + shortestDiff(currentRotation, homeRotation);
     });
 
     layout();
@@ -674,43 +1209,107 @@
 
     // Modal
     const cardData = {
+      site: {
+        title: "Шкільний сайт",
+        tag: "Web / UI",
+        content: `<p>Особистий кабінет учня: розклад, завдання, оцінки, самоврядування та чат.</p>
+          <p>«Доброго ранку, Діденко!» — спокійний зелений інтерфейс з картками розділів і мотиваційною стрічкою.</p>
+          <ul><li>UI / UX дизайн</li><li>Дашборд учня</li><li>Адаптивна верстка</li></ul>`
+      },
       nebula: {
-        title: "Cosmic Visuals",
-        tag: "Motion / 3D",
-        content: `<p>Серія експериментальних візуалів, натхненних туманностями та космічними явищами. Поєднання 3D-рендеру та procedural текстур.</p>
-          <ul><li>Cinema 4D + Redshift</li><li>After Effects compositing</li><li>Колірна палітра: глибокий космос</li></ul>`
-      },
-      deep: {
-        title: "Deep Impact",
-        tag: "Brand / Campaign",
-        content: `<p>Концепт рекламної кампанії для науково-популярного проєкту. Метеорит як метафора несподіваних ідей.</p>
-          <ul><li>Key visual + motion</li><li>Poster series</li><li>Social media assets</li></ul>`
-      },
-      identity: {
-        title: "Personal Identity",
-        tag: "Branding",
-        content: `<p>Особистий логотип та візуальна система. Око в квітці — символ спостереження та творчого бачення.</p>
-          <ul><li>Logo design</li><li>Business cards</li><li>Digital assets</li></ul>`
-      },
-      about: {
         title: "Діденко Данило",
-        tag: "About",
+        tag: "Про мене",
         content: `<p><strong>9-А</strong></p>
           <p>Працюю на стику дизайну, анімації та інтерактивних медіа. Люблю чисті форми, сильний контраст і трохи хаосу в деталях.</p>
           <ul><li>UI / UX Design</li><li>Motion Graphics</li><li>3D & Visualization</li><li>Brand Identity</li></ul>`
       },
-
-      polestar: {
-        title: "Polestar 1:1",
-        tag: "Automotive / Concept",
-        content: `<p>Концептуальна візуалізація для Polestar. Фокус на пропорціях 1:1 та мінімалістичній естетиці бренду.</p>
-          <ul><li>3D modeling & lighting</li><li>Product visualization</li><li>Look development</li></ul>`
+      empire: {
+        title: "EmpireCraft",
+        tag: "Minecraft / Web",
+        content: `<p>Колись хотів зробити свій сервер в майнкрафті...</p>
+          <p>Концепт політичного середньовічного Minecraft-сервера: дипломатія, економіка, війни та управління державою — не просто слова, а реальні механіки геймплею.</p>
+          <ul><li>Концепт сервера</li><li>Веб-дизайн лендінгу</li><li>Візуальна айдентика</li></ul>
+          <a class="pdf-link" href="EmpireCraft.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
       },
-      casino: {
-        title: "Casino Noir",
-        tag: "Editorial / Branding",
-        content: `<p>Темна, розкішна естетика для казино-бренду. Гра з типографікою, золотом і глибоким чорним.</p>
-          <ul><li>Brand identity</li><li>Print & digital</li><li>Motion intro</li></ul>`
+      nature: {
+        title: "Природа",
+        tag: "Презентація",
+        content: `<p>«Земля не пробачає байдужості» — презентація про відповідальність людини перед природою.</p>
+          <p>Сучасні люди стикаються з важливим завданням — охороняти планету. Природа має обмежену здатність витримувати навантаження.</p>
+          <ul><li>Екодизайн</li><li>Візуальний наратив</li><li>Типографіка + фото</li></ul>
+          <a class="pdf-link" href="Nature.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
+      },
+      knight: {
+        title: "Лицарство в Західній Європі",
+        tag: "Історія / Презентація",
+        content: `<p>Лицарство — особливий суспільний стан у середньовічній Європі, який об’єднував воїнів-феодалів.</p>
+          <p>Не лише військова, а й культурна та моральна традиція: кодекс честі, відвага, вірність, захист слабких.</p>
+          <ul><li>Історична презентація</li><li>Візуальний ряд епохи</li><li>Структура та типографіка</li></ul>
+          <a class="pdf-link" href="Лицарство.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
+      },
+      zhuk: {
+        title: "Михайло Жук",
+        tag: "Мистецтво / Презентація",
+        content: `<p>Презентація про українського художника Михайла Жука — модерн, символізм і витончена графіка.</p>
+          <p>Роботи наповнені рослинними орнаментами, м’якими тонами та поетичною атмосферою.</p>
+          <ul><li>Історія мистецтва</li><li>Візуальний наратив</li><li>Типографіка в стилі модерн</li></ul>
+          <a class="pdf-link" href="Михайло.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
+      },
+      cats: {
+        title: "Породи котів",
+        tag: "Презентація",
+        content: `<p>Презентація про породи котів — від рудих і білих до чорних і довгошерстих.</p>
+          <p>Яскравий фотоколаж і проста структура для легкого перегляду.</p>
+          <ul><li>Фотографія</li><li>Колажна композиція</li><li>Інфодизайн</li></ul>
+          <a class="pdf-link" href="Породи.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
+      },
+      sea: {
+        title: "Морська хвороба",
+        tag: "Презентація",
+        content: `<p>Презентація про морську хворобу — причини, симптоми та як з нею справлятися в морі.</p>
+          <p>Спокійна океанська естетика й чиста типографіка.</p>
+          <ul><li>Інформаційний дизайн</li><li>Фото + типографіка</li><li>Структура слайдів</li></ul>
+          <a class="pdf-link" href="Морська_хвороба.pdf" target="_blank" rel="noopener">Відкрити презентацію →</a>`
+      },
+      olymp: {
+        title: "Олімпіада з хімії",
+        tag: "Досягнення",
+        content: `<p><strong>Перемога в ІІ етапі Всеукраїнської учнівської олімпіади з хімії</strong> у 2025/2026 навчальному році.</p>
+          <p>Грамота від Міністерства освіти і науки України та Харківського національного університету імені В. Н. Каразіна (Навчально-науковий інститут Хімії).</p>
+          <ul><li>Всеукраїнська олімпіада</li><li>Хімія</li><li>2025/2026</li></ul>`
+      },
+      mechnikov: {
+        title: "Турнір ім. Мечникова",
+        tag: "Досягнення",
+        content: `<p><strong>Перемога у XXVII Хіміко-біологічному турнірі імені І. І. Мечникова</strong> (23 листопада 2025 року).</p>
+          <p>Організатор — Навчально-науковий інститут Хімії ХНУ імені В. Н. Каразіна. Запрошення до вступу на хімічний факультет.</p>
+          <ul><li>Хіміко-біологічний турнір</li><li>ім. І. І. Мечникова</li><li>2025</li></ul>`
+      },
+      read: {
+        title: "Читання",
+        tag: "Хобі",
+        content: `<p>Я дуже сильно люблю читати.</p>
+          <p>Одна з улюблених серій — «Коти-вояки» Ерін Гантер. Книги відкривають інші світи, персонажів і історії, у які хочеться повертатися знову і знову.</p>
+          <ul><li>Художня література</li><li>Серії та світи</li><li>«Коти-вояки»</li></ul>`
+      },
+      chess: {
+        title: "Шахи",
+        tag: "Хобі / Спорт",
+        content: `<p>Граю в шахи — стратегія, концентрація і партія за партією.</p>
+          <p>Мій профіль на Chess.com:</p>
+          <a class="pdf-link" href="https://www.chess.com/member/28sparta" target="_blank" rel="noopener">chess.com/member/28sparta →</a>`
+      },
+      medals: {
+        title: "Автомоделювання",
+        tag: "Спорт / Досягнення",
+        content: `<p>Багаторазовий призер міських і обласних змагань з автомоделювання.</p>
+          <p>Медалі за 1-ше та 2-ге місця — результат тренувань, точності та любові до техніки.</p>
+          <ul><li>Міські змагання</li><li>Обласні змагання</li><li>1-ше та 2-ге місця</li></ul>`
+      },
+      future: {
+        title: "Незабаром",
+        tag: "…",
+        content: `<p>Можливо тут іще щось буде в майбутньому.</p>`
       }
     };
 
